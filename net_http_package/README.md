@@ -15,11 +15,11 @@ Handler is a interface if any struct have ServerHTTP method.
    func ListenAndServe(addr string, handler Handler) error
    ```
 
-[http.ListenAndServeTLS](https://godoc.org/net/http#ListenAndServeTLS)
-``` Go
-func ListenAndServeTLS(addr, certFile, keyFile string, handler Handler) error
-```
-*Notice that both of the above functions take a handler*
+   [http.ListenAndServeTLS](https://godoc.org/net/http#ListenAndServeTLS)
+   ``` Go
+   func ListenAndServeTLS(addr, certFile, keyFile string, handler Handler) error
+   ```
+   * Notice that both of the above functions take a handler*
 ***
 3. Request
 To [http.Request](https://godoc.org/net/http#Request) see the detail </br>
@@ -52,8 +52,54 @@ There are a summary for http.Request.
     RemoteAddr string
    }
    ```
-* PostForm and Form
+ * PostForm and Form
 
-   ```http.Request``` is a struct. It has the fields ```Form``` & ```PostForm```. If we read the documentation on these, we see:
+    ```http.Request``` is a struct. It has the fields ```Form``` & ```PostForm```. If we read the documentation on these, we see:
 
+    ```
+    Form
+    Form contains the parsed form data, including both the ***URL*** field's query parameters and the POST or PUT form data.
+    This field is only available after **ParseForm** is called.
+    The HTTP client ignores Form and uses Body instead.
+    Form url.Values
+   
+    PostForm contains the parsed form data from POST, PATCH or PUT body parameters.
+    This field is only available after **ParseForm** is called.
+    The HTTP client ignores PostForm and uses Body instead.
+    PostForm url.Values
+    ```
+    *ParseForm*
+    ```go 
+    func (r *Request) ParseForm() error 
+    ```
+
+     we see that this is a method attached to a *http.Request.
+
+ * Http.Method
+      The http.Request type is a struct which has a Method field.
+
+* URL Values
+      The http.Request type is a struct which has a URL field. Notice that the type is a [*url.URL](https://godoc.org/net/url#URL)
+```go
+type URL struct {
+    Scheme     string
+    Opaque     string    // encoded opaque data
+    User       *Userinfo // username and password information
+    Host       string    // host or host:port
+    Path       string
+    RawPath    string // encoded path hint (Go 1.5 and later only; see EscapedPath method)
+    ForceQuery bool   // append a query ('?') even if RawQuery is empty
+    RawQuery   string // encoded query values, without '?'
+    Fragment   string // fragment for references, without '#'
+}
+```
+The general form represented is:
+```go
+[scheme:][//[userinfo@]host][/]path[?query][#fragment]
+```
+* Work with the HTTP header
+The http.Request type is a struct which has a Header field.
+From the documentation about the http.Header struct, we see that:
+  ```go 
+  type Header map[string][]string
    ```
